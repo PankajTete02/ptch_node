@@ -1,10 +1,17 @@
-import express from 'express';
-import type { Request, Response } from 'express';
+
+import express, { Request, Response } from 'express';
+import routes from "./src/routes/routes"
+
 
 const app = express();
 const port = 3000;
 
-// Define the route with types for `req` and `res`
+app.use(express.json());
+
+
+app.use('/dashboard', routes); // Use dashboard routes correctly
+
+
 app.get('/', (req: Request, res: Response) => {
     res.status(200).send("Welcome to root URL of Server");
 });
@@ -17,3 +24,4 @@ app.listen(port, (error?: any) => {
         console.log("Error occurred, server can't start", error);
     }
 });
+
