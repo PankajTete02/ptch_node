@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken');
 
+import {jwt_secret} from '../../config/environment'
+
 export const generateToken = (payload: any) => {
 	if (!payload) {
 		return { status: 404, jsonBody: { status: 404, error: 'User not found in system' } };
 	}
-	const secretKey = process.env.jwt_secret; // Replace with your own secret key
+	const secretKey = jwt_secret; // Replace with your own secret key
 	const options = {
 		expiresIn: '1h', // Token expiration time
 		issuer: 'Pitchlab.com',
@@ -21,7 +23,7 @@ export function verifyToken(token: string): any {
 	}
 
 	try {
-		const secretKey = process.env.jwt_secret;
+		const secretKey = jwt_secret;
 		const options = {
 			issuer: 'Pitchlab.com',
 			audience: 'Pitchlab.com',
