@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 const jwt = require('jsonwebtoken');
 
 import {
@@ -13,7 +13,7 @@ import {
 import { jwt_secret } from '../../config/environment';
 
 export function jwtMiddleware(req: Request, res: Response, next: NextFunction): void {
-	console.log(req);
+	console.log("req",req);
 	
     const authHeader = req.headers['authorization'];
     const secretKey = process.env.jwt_secret || jwt_secret;

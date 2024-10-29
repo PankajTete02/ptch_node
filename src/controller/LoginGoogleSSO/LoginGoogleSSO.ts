@@ -5,12 +5,13 @@ const sql = require('mssql');
 import { generateToken } from '../../utils/jwtUtils';
 import { sqlConfig } from '../../../config/dbConfig';
 
-
+import { GOOGLE_CLIENT_ID } from '../../../config/environment'
+import { Request, Response } from 'express';
 
 const app = express();
 app.use(express.json());
 
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_ID = GOOGLE_CLIENT_ID;
 
 async function verifyToken(token: string) {
 	const client = new OAuth2Client(CLIENT_ID);
@@ -44,69 +45,20 @@ async function findUser(username: string) {
 }
 
 
-// export const LoginGoogleSSO = async(req:express.Request,res:express.Response)=>{
-//     try {
-// 		const reqBody: LoginRequest = req.body;
-
-// 		if (!reqBody) {
-// 			return {
-// 				status: 400,
-// 				jsonBody: { error: 'Request body is missing' },
-// 			};
-// 		}
-
-// 		if (!reqBody.token) {
-// 			return { status: 400, jsonBody: { error: 'Token is require' } };
-// 		}
-
-// 		let username: string;
-// 		try {
-// 			username = await verifyToken(reqBody.token);
-// 		}  catch (err:any) {
-//             if (err.code && err.code > 1) {
-//               res.status(err.code).json({
-//                 statusCode: err.code, message: err.message ? err.message : err
-//               })
-//             } else {
-//               res.status(200).json({
-//                 statusCode: err.code ? err.code : 500, message: err.message ? err.message : err
-//               })
-//             }
-//           }
-// 		const user = await findUser(username);
-// 		if (!user) {
-// 			return { status: 404, jsonBody: { status: 404, error: 'User not found' } };
-// 		}
-
-// 		const token: Token = { jwt: generateToken(user) } as Token;
-
-// 		return {
-// 			status: 200,
-// 			jsonBody: { token: token, message: 'Login successful' },
-// 		};
-// 	}catch (err:any) {
-//         if (err.code && err.code > 1) {
-//           res.status(err.code).json({
-//             statusCode: err.code, message: err.message ? err.message : err
-//           })
-//         } else {
-//           res.status(200).json({
-//             statusCode: err.code ? err.code : 500, message: err.message ? err.message : err
-//           })
-//         }
-//       }
-// }
-
-export const LoginGoogleSSO = async (req: express.Request, res: express.Response) => {
+export async function LoginGoogleSSO(req: Request, res: Response): Promise<void> {
 	try {
+		console.log(req.body);
+		
 		const reqBody: LoginRequest = req.body;
 
 		if (!reqBody) {
-			return res.status(400).json({ error: 'Request body is missing' });
+			res.status(400).json({ error: 'Request body is missing' });
+			return;
 		}
 
 		if (!reqBody.token) {
-			return res.status(400).json({ error: 'Token is required' });
+			res.status(400).json({ error: 'Token is required' });
+			return;
 		}
 
 		let username: string;
@@ -116,36 +68,38 @@ export const LoginGoogleSSO = async (req: express.Request, res: express.Response
 			username = await verifyToken(reqBody.token);
 		} catch (err: any) {
 			if (err.code && err.code > 1) {
-				return res.status(err.code).json({
-					statusCode: err.code,
-					message: err.message ? err.message : err,
-				});
+				 res.status(err.code).json({statusCode: err.code,message: err.message ? err.message : err});
+				 return;
 			} else {
-				return res.status(401).json({
+				res.status(401).json({
 					statusCode: 401,
 					message: err.message ? err.message : 'Unauthorized',
 				});
+				return;
 			}
 		}
 
 		// Fetch the user by username
 		const user = await findUser(username);
 		if (!user) {
-			return res.status(404).json({ statusCode: 404, error: 'User not found' });
+			res.status(404).json({ statusCode: 404, error: 'User not found' });
+			return;
 		}
 
 		// Generate JWT token
 		const token: Token = { jwt: generateToken(user) } as Token;
 
-		return res.status(200).json({ token, message: 'Login successful' });
+		res.status(200).json({ token, message: 'Login successful' });
+		return;
 	} catch (err: any) {
 		console.error(err); // Log the error for debugging
 
 		// Handle unexpected errors
-		return res.status(500).json({
+		 res.status(500).json({
 			statusCode: 500,
 			message: err.message ? err.message : 'Internal Server Error',
 		});
+		return;
 	}
 };
 

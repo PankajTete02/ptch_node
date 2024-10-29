@@ -9,6 +9,7 @@ import { getAllPitchCategory } from '../controller/PitchCategory/pitchCategory';
 import { getCategoryById } from '../controller/PitchCategory/pitchCategory';
 import { videos } from '../controller/Video/video'; // Correct path to video controller
 import {generateSASTokens} from '../controller/SasUrl/sasUrl'
+import {LoginGoogleSSO} from '../controller/LoginGoogleSSO/LoginGoogleSSO'
 
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router.get('/login/sso/google', (req, res) => {
 
 
 // Route for dashboard access
+router.post('/login/sso/google' ,LoginGoogleSSO)
 router.get('/dashboard', jwtMiddleware, dashboard); // Adjust according to your controller logic
 router.post('/insertPitchCategory', jwtMiddleware, inserPitchCategory);
 // In your router setup
