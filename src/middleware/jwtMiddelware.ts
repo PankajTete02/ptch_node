@@ -13,7 +13,6 @@ import {
 import { jwt_secret } from '../../config/environment';
 
 export function jwtMiddleware(req: Request, res: Response, next: NextFunction): void {
-	console.log("req",req);
 	
     const authHeader = req.headers['authorization'];
     const secretKey = jwt_secret;

@@ -10,13 +10,14 @@ import {
 import { randomstring } from '../../../common/randomestring';
 import { SASToken } from '../../models/token';
 import { HEADER_CONTAINER_NAME } from '../../constants/constant';
+import {PORTFOLIO_STORAGE_ACCOUNT,PORTFOLIO_STORAGE_ACCOUNT_KEY, SAS_TOKEN_DURATION_MINS} from '../../../config/environment'
  
 
 
 export async function generateSASTokens(req: Request, res: Response): Promise<void> {
     try {
-        const accountName = process.env.PORTFOLIO_STORAGE_ACCOUNT;
-        const accountKey = process.env.PORTFOLIO_STORAGE_ACCOUNT_KEY;
+        const accountName = PORTFOLIO_STORAGE_ACCOUNT;
+        const accountKey = PORTFOLIO_STORAGE_ACCOUNT_KEY;
 
         if (!accountName || !accountKey) {
             res.status(400).json({ error: 'Account Name or Account Key missing' });
@@ -26,7 +27,14 @@ export async function generateSASTokens(req: Request, res: Response): Promise<vo
         const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
         const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, sharedKeyCredential);
 
+        console.log("sharedKeyCredential",sharedKeyCredential);
+
+        console.log("blobServiceClient",blobServiceClient);
+        
+        
         const containerName = req.headers[HEADER_CONTAINER_NAME] as string;
+        console.log("containerName",containerName);
+        
         if (!containerName) {
             res.status(400).json({ error: 'Container Name is not provided' });
             return;
@@ -39,7 +47,7 @@ export async function generateSASTokens(req: Request, res: Response): Promise<vo
             return;
         }
 
-        const durationInMins = process.env.SAS_TOKEN_DURATION_MINS;
+        const durationInMins = SAS_TOKEN_DURATION_MINS;
         if (!durationInMins) {
             res.status(400).json({ error: 'Duration for SAS token not provided' });
             return;

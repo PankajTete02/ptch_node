@@ -7,6 +7,7 @@ const { HEADER_CONTAINER_NAME, HEADER_USER_ID } = require('../../constants/const
 const { verifyToken } = require('../../utils/jwtUtils');
 import { Media } from '../../models/media';
 import { Request, Response } from 'express';
+import { jwt_secret,PORTFOLIO_STORAGE_CONN_STRING ,QUEUE_NAME} from '../../../config/environment';
  
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
@@ -27,7 +28,7 @@ async function saveVideo(media: Media, userId: number): Promise<number> {
  
  
 async function postMessageToQueue(id: number, media: Media, containerName: string, userId: number) {
-    const queueClient = new QueueClient(process.env.PORTFOLIO_STORAGE_CONN_STRING, process.env.QUEUE_NAME);
+    const queueClient = new QueueClient(PORTFOLIO_STORAGE_CONN_STRING,QUEUE_NAME);
  
     const messagePayload = {
         videoID: id,
@@ -45,7 +46,7 @@ async function postMessageToQueue(id: number, media: Media, containerName: strin
  
 export async function videos(req: Request, res: Response):Promise<void> {
     const authHeader = req.headers['authorization'];
-    const secretKey = process.env.jwt_secret;
+    const secretKey = jwt_secret;
  
     if (!authHeader) {
         console.log('Missing Authorization header');
