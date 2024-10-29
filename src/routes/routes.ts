@@ -28,7 +28,7 @@ router.post('/login/sso/google' ,LoginGoogleSSO)
 router.get('/dashboard', jwtMiddleware, dashboard); // Adjust according to your controller logic
 router.post('/insertPitchCategory', jwtMiddleware, inserPitchCategory);
 // In your router setup
-router.put('/updateCategory', jwtMiddleware, updatePitchCategory);
+router.post('/updateCategory', jwtMiddleware, updatePitchCategory);
 
 router.post('/deletePitchCategory', jwtMiddleware ,deletePitchCategory);
 

@@ -6,6 +6,18 @@ const app = express();
 const port = 3000;
  
 app.use(express.json());
+
+const cors = require("cors");
+app.use(
+  cors({
+    origin: [
+      "https://vacana.cylsys.com",
+      "http://localhost:4300"
+    ],
+    credentials: true,
+    methods: "POST, GET, PUT, OPTIONS, DELETE,PATCH",
+  })
+);
  
  
 // Use dashboard routes correctly

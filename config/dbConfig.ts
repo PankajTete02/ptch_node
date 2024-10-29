@@ -17,7 +17,7 @@ export const sqlConfig = {
         type: 'default'
     },
     options: {
-      encrypt: true,
+      encrypt: false,
       trustServerCertificate: true
     },
   }

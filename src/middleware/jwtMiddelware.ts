@@ -16,7 +16,7 @@ export function jwtMiddleware(req: Request, res: Response, next: NextFunction): 
 	console.log("req",req);
 	
     const authHeader = req.headers['authorization'];
-    const secretKey = process.env.jwt_secret || jwt_secret;
+    const secretKey = jwt_secret;
 	console.log(authHeader,"authHeader");
 	
 
