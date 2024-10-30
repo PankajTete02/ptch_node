@@ -29,15 +29,3 @@ app.get('/', (req: Request, res: Response) => {
     res.status(200).send("Welcome to root URL of Server");
 });
 
-app.get('/hello', (req: Request, res: Response) => {
-  res.status(200).send("Hello World");
-});
- 
-// Start the server with a typed error parameter
-app.listen(port, (error?: any) => {
-    if (!error) {
-        console.log(`Server is running on http://localhost:${port}`);
-    } else {
-        console.log("Error occurred, server can't start", error);
-    }
-});
