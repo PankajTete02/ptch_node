@@ -4,7 +4,7 @@ import routes from "./routes/routes";
  
  
 const app = express();
-const port = 3000;
+const port = 4000;
  
 app.use(express.json());
 
@@ -25,7 +25,12 @@ app.use(
 app.use('/api', routes);
  
 app.get('/', (req: Request, res: Response) => {
+    console.log('request received');
     res.status(200).send("Welcome to root URL of Server");
+});
+
+app.get('/hello', (req: Request, res: Response) => {
+  res.status(200).send("Hello World");
 });
  
 // Start the server with a typed error parameter
