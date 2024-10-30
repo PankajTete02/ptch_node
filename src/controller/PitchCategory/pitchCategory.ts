@@ -1,4 +1,4 @@
-import { sqlConfig } from '../../../config/dbConfig';
+import { sqlConfig } from '../../../src/config/dbConfig';
 import { PitchCategory } from '../../models/pitchCategory';
 import { verifyToken } from '../../utils/jwtUtils';
 import { jwtMiddleware } from '../../middleware/jwtMiddelware';

@@ -10,7 +10,7 @@ import {
     HEADER_CLIENT_NAME,
     HEADER_USER_ROLE,
 } from '../constants/constant';
-import { jwt_secret } from '../../config/environment';
+import { jwt_secret } from '../../src/config/environment';
 
 export function jwtMiddleware(req: Request, res: Response, next: NextFunction): void {
 	

@@ -3,9 +3,9 @@ import express from "express";
 const { OAuth2Client } = require('google-auth-library');
 const sql = require('mssql');
 import { generateToken } from '../../utils/jwtUtils';
-import { sqlConfig } from '../../../config/dbConfig';
+import { sqlConfig } from '../../../src/config/dbConfig';
 
-import { GOOGLE_CLIENT_ID } from '../../../config/environment'
+import { GOOGLE_CLIENT_ID } from '../../../src/config/environment'
 import { Request, Response } from 'express';
 
 const app = express();
