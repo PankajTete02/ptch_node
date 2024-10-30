@@ -7,10 +7,10 @@ import {
     StorageSharedKeyCredential,
     BlobServiceClient
 } from '@azure/storage-blob';
-import { randomstring } from '../../../src/common/randomestring';
+import { randomstring } from '../../common/randomestring';
 import { SASToken } from '../../models/token';
 import { HEADER_CONTAINER_NAME } from '../../constants/constant';
-import {PORTFOLIO_STORAGE_ACCOUNT,PORTFOLIO_STORAGE_ACCOUNT_KEY, SAS_TOKEN_DURATION_MINS} from '../../../src/config/environment'
+import {PORTFOLIO_STORAGE_ACCOUNT,PORTFOLIO_STORAGE_ACCOUNT_KEY, SAS_TOKEN_DURATION_MINS} from '../../config/environment'
  
 
 

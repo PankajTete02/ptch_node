@@ -1,7 +1,6 @@
-import { sqlConfig } from '../../../src/config/dbConfig';
+import { sqlConfig } from '../../config/dbConfig';
 import { PitchCategory } from '../../models/pitchCategory';
 import { verifyToken } from '../../utils/jwtUtils';
-import { jwtMiddleware } from '../../middleware/jwtMiddelware';
 import { Request, Response } from 'express';
 
 const sql = require('mssql');

@@ -7,7 +7,7 @@ const { HEADER_CONTAINER_NAME, HEADER_USER_ID } = require('../../constants/const
 const { verifyToken } = require('../../utils/jwtUtils');
 import { Media } from '../../models/media';
 import { Request, Response } from 'express';
-import { jwt_secret,PORTFOLIO_STORAGE_CONN_STRING ,QUEUE_NAME} from '../../../src/config/environment';
+import { jwt_secret,PORTFOLIO_STORAGE_CONN_STRING ,QUEUE_NAME} from '../../config/environment';
  
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies

@@ -1,9 +1,9 @@
 const { BlobServiceClient } = require('@azure/storage-blob');
 import { BlobClient, BlobSASPermissions, ContainerClient, generateBlobSASQueryParameters, StorageSharedKeyCredential } from '@azure/storage-blob';
-import { sqlConfig } from '../../../src/config/dbConfig';
+import { sqlConfig } from '../../config/dbConfig';
 const sql = require('mssql');
 const Groq = require('groq-sdk');
-import {PORTFOLIO_STORAGE_ACCOUNT, PORTFOLIO_STORAGE_ACCOUNT_KEY , SAS_TOKEN_DURATION_MINS , GROQ_API_KEY} from '../../../src/config/environment'
+import {PORTFOLIO_STORAGE_ACCOUNT, PORTFOLIO_STORAGE_ACCOUNT_KEY , SAS_TOKEN_DURATION_MINS , GROQ_API_KEY} from '../../config/environment'
 
 
 async function generateSasUrl(containerName: string, blobName: string): Promise<string> {

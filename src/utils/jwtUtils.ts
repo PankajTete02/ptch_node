@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-import {jwt_secret} from '../../src/config/environment'
+import {jwt_secret} from '../config/environment';
 
 export const generateToken = (payload: any) => {
 	if (!payload) {
