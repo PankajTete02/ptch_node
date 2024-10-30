@@ -2,7 +2,7 @@ const express = require('express');
 const sql = require('mssql');
 const jwt = require('jsonwebtoken');
 const { QueueClient } = require('@azure/storage-queue');
-const { dbconfig } = require('../../../config/dbConfig'); // Adjust the path as necessary
+const { dbconfig } = require('../../config/dbConfig'); // Adjust the path as necessary
 const { HEADER_CONTAINER_NAME, HEADER_USER_ID } = require('../../constants/constant');
 const { verifyToken } = require('../../utils/jwtUtils');
 import { Media } from '../../models/media';
