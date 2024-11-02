@@ -2,24 +2,30 @@ const express = require('express');
 const sql = require('mssql');
 const jwt = require('jsonwebtoken');
 const { QueueClient } = require('@azure/storage-queue');
-const { dbconfig } = require('../../config/dbConfig'); // Adjust the path as necessary
+const  dbconfig  = require('../../config/dbConfig'); 
 const { HEADER_CONTAINER_NAME, HEADER_USER_ID } = require('../../constants/constant');
 const { verifyToken } = require('../../utils/jwtUtils');
 import { Media } from '../../models/media';
 import { Request, Response } from 'express';
 import { jwt_secret,PORTFOLIO_STORAGE_CONN_STRING ,QUEUE_NAME} from '../../config/environment';
+import { audiotranscription } from '../Audio/audioTranscription';
  
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
  
 async function saveVideo(media: Media, userId: number): Promise<number> {
-    var poolConnection = await sql.connect(dbconfig);
+    console.log(media,"mmmm");
+    console.log(typeof dbconfig.sqlConfig.server,"dbbbb");
+    
+    var poolConnection = await sql.connect(dbconfig.sqlConfig);
+    // console.log(poolConnection,"pooll");
  
     var resultSet = await poolConnection.request().query(`
         Insert into videos(userId, categoryId, videoBlobName, videoBlobUrl, audioBlobName, audioBlobUrl)
         output Inserted.ID values(
         ${userId}, '${media.categoryId}', '${media.blobNameVideo}', '${media.blobUrlVideo}', '${media.blobNameAudio}', '${media.blobUrlAudio}')
     `);
+ console.log(resultSet,"rssss");
  
     console.log(`${resultSet.recordset.length} rows returned.`);
  
@@ -96,6 +102,7 @@ export async function videos(req: Request, res: Response):Promise<void> {
         const containerName: any = req.headers[HEADER_CONTAINER_NAME];
  
         await postMessageToQueue(mediaId, media, containerName, Number(userId));
+        await audiotranscription({ videoID: mediaId, containerName, audioBlobName: media.blobNameAudio, userId: Number(userId) });
         res.status(201).json({ code: 201, newResource, message: 'Pitch inserted successfully' });
         return
     } catch (error) {

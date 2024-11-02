@@ -111,6 +111,8 @@ async function insertSegments(segments: { text: string; start_time: number; end_
  
 // Main function triggered by the storage queue
 export async function audiotranscription(queueItem: unknown): Promise<void> {
+    console.log(queueItem,"qttttt");
+    
     try {
         if (!queueItem) {
             throw new Error('Queue item is null or undefined');
