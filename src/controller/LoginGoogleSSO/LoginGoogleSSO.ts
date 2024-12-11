@@ -47,7 +47,6 @@ async function findUser(username: string) {
 
 export async function LoginGoogleSSO(req: Request, res: Response): Promise<void> {
 	try {
-		console.log(req.body);
 		
 		const reqBody: LoginRequest = req.body;
 

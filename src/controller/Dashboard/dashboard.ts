@@ -4,7 +4,7 @@ import express from "express";
 // import { jwtMiddleware } from '../middleware/jwtMiddleware';
 
 export const dashboard = async (req: express.Request, res: express.Response): Promise<void> => {
-    console.log(`dashboard function processed request for url `);
+    // console.log(`dashboard function processed request for url `);
 
     const responseData = {
         pitches_recorded: 35,

@@ -27,13 +27,8 @@ export async function generateSASTokens(req: Request, res: Response): Promise<vo
         const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
         const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, sharedKeyCredential);
 
-        console.log("sharedKeyCredential",sharedKeyCredential);
-
-        console.log("blobServiceClient",blobServiceClient);
-        
         
         const containerName = req.headers[HEADER_CONTAINER_NAME] as string;
-        console.log("containerName",containerName);
         
         if (!containerName) {
             res.status(400).json({ error: 'Container Name is not provided' });

@@ -16,7 +16,6 @@ export function jwtMiddleware(req: Request, res: Response, next: NextFunction): 
 	
     const authHeader = req.headers['authorization'];
     const secretKey = jwt_secret;
-	console.log(authHeader,"authHeader");
 	
 
     if (!authHeader) {
