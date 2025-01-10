@@ -10,7 +10,9 @@ import { getCategoryById } from '../controller/PitchCategory/pitchCategory';
 import { videos } from '../controller/Video/video'; // Correct path to video controller
 import {generateSASTokens} from '../controller/SasUrl/sasUrl'
 import {LoginGoogleSSO} from '../controller/LoginGoogleSSO/LoginGoogleSSO'
-
+import {login} from '../controller/LoginGoogleSSO/auth'
+import { verifyJwt } from '../controller/LoginGoogleSSO/jwtauth';
+import { log } from 'console';
 
 const router = express.Router();
 
@@ -25,19 +27,20 @@ router.get('/login/sso/google', (req, res) => {
 
 // Route for dashboard access
 router.post('/login/sso/google' ,LoginGoogleSSO)
-router.get('/dashboard', jwtMiddleware, dashboard); // Adjust according to your controller logic
-router.post('/insertPitchCategory', jwtMiddleware, inserPitchCategory);
+router.post('/login', login);
+router.get('/dashboard', dashboard); // Adjust according to your controller logic
+router.post('/insertPitchCategory', inserPitchCategory);
 // In your router setup
-router.post('/updateCategory', jwtMiddleware, updatePitchCategory);
+router.post('/updateCategory', updatePitchCategory);
 
-router.post('/deletePitchCategory', jwtMiddleware ,deletePitchCategory);
+router.post('/deletePitchCategory' ,deletePitchCategory);
 
-router.post('/getAllpitchCategory', jwtMiddleware ,getAllPitchCategory);
+router.post('/getAllpitchCategory',getAllPitchCategory);
 
-router.post('/getCategoryById', jwtMiddleware ,getCategoryById);
+router.post('/getCategoryById' ,getCategoryById);
 
-router.post('/videos', jwtMiddleware, videos);
+router.post('/videos', videos);
 
-router.get('/sasurl', jwtMiddleware, generateSASTokens);
+router.get('/sasurl', generateSASTokens);
 
 export default router;

@@ -2,6 +2,11 @@ import { sqlConfig } from '../../config/dbConfig';
 import { PitchCategory } from '../../models/pitchCategory';
 import { verifyToken } from '../../utils/jwtUtils';
 import { Request, Response } from 'express';
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+import { jwt_secret } from "../../config/environment";
+import { verifyJwt } from '../../controller/LoginGoogleSSO/jwtauth';
+const envSecrectKey = jwt_secret
 
 const sql = require('mssql');
 
@@ -32,9 +37,9 @@ export async function inserPitchCategory(req: Request, res: Response): Promise<v
         return; // Exit the function early
     }
 
-    let decodedToken;
+    let decodedToken : JwtPayload;
     try {
-        decodedToken = await verifyToken(token);
+        decodedToken = jwt.verify(token, envSecrectKey as string)as JwtPayload;
     } catch (error) {
         console.log('Error verifying JWT token:', error);
         res.status(401).json({ code: 401, error: 'Invalid JWT token' });
@@ -67,6 +72,23 @@ export async function inserPitchCategory(req: Request, res: Response): Promise<v
 
     try {
         const pool = await sql.connect(sqlConfig);
+
+        // Check if the category name already exists
+        const checkQuery = `
+            SELECT CategoryId FROM pitchCategory WHERE CategoryName = @CategoryName AND userId = @userId AND is_active = 1
+        `;
+        const existingCategory = await pool
+            .request()
+            .input('CategoryName', sql.NVarChar(255), pitchCategory.CategoryName)
+            .input('userId', sql.Int, pitchCategory.userId)
+            .query(checkQuery);
+
+        if (existingCategory.recordset.length > 0) {
+            console.log(`Category already exists with name: ${CategoryName}`);
+            res.status(400).json({ code: 409,message: 'Category already exists' });
+            return;
+        }
+
 
         const query = `
             INSERT INTO pitchCategory
@@ -109,9 +131,13 @@ export async function updatePitchCategory(req: Request, res: Response): Promise<
         return; // Exit early
     }
 
-    let decodedToken;
+    let decodedToken: JwtPayload;
+
+   
     try {
-        decodedToken = await verifyToken(token);
+        // decodedToken = await verifyToken(token);
+        decodedToken = jwt.verify(token, envSecrectKey as string)as JwtPayload;
+        console.log(decodedToken);
     } catch (error) {
         res.status(401).json({ code: 401, error: 'Invalid JWT token' });
         return; // Exit early
@@ -212,7 +238,7 @@ export async function deletePitchCategory(req: Request, res: Response): Promise<
 
     let decodedToken;
     try {
-        decodedToken = await verifyToken(token);
+        decodedToken = jwt.verify(token, envSecrectKey as string);
     } catch (error) {
         res.status(401).json({ code: 401, error: 'Invalid JWT token' });
         return; // Exit early
@@ -261,24 +287,21 @@ export async function deletePitchCategory(req: Request, res: Response): Promise<
 }
 
 export async function getAllPitchCategory(req: Request, res: Response): Promise<void> {
-    console.log(`Processing request for URL: ${req.url}`);
-
-    // Verify the Authorization header
+    // console.log(`Processing request for URL: ${req.url}`);
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         res.status(401).json({ code: 401, error: 'Authorization header is missing' });
         return; // Exit early
     }
-
-    const token = authHeader.split(' ')[1];
+    const token : any = authHeader.split(' ')[1];
     if (!token) {
         res.status(401).json({ code: 401, error: 'JWT token is missing' });
         return; // Exit early
     }
 
-    let decodedToken;
     try {
-        decodedToken = await verifyToken(token);
+        // decodedToken = await verifyToken(token);;
+         const decodedToken =  jwt.verify(token, envSecrectKey as string);
     } catch (error) {
         res.status(401).json({ code: 401, error: 'Invalid JWT token' });
         return; // Exit early
@@ -358,7 +381,7 @@ export async function getCategoryById(req: Request, res: Response): Promise<void
 
     let decodedToken;
     try {
-        decodedToken = await verifyToken(token);
+        decodedToken = jwt.verify(token, envSecrectKey as string);
     } catch (error) {
         res.status(401).json({ code: 401, error: 'Invalid JWT token' });
         return; // Exit early

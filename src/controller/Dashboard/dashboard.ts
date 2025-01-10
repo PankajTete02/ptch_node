@@ -25,7 +25,6 @@ export const dashboard = async (req: express.Request, res: express.Response): Pr
             November: 20,
             December: 40,
         },
-    };
-
+    };    
     res.status(200).json(responseData);
 };
